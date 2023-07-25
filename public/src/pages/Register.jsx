@@ -1,14 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
+    const [values, setValues] = useState({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+    const toastOptions = {
+        position: "top-center",
+        autoClose: 3000,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+    };
+    const handleValidation = () => {
+        const { username, password, confirmPassword } = values;
+        if (password !== confirmPassword) {
+            toast.error("The password didn't match", toastOptions);
+            return false;
+        } else if (username.length < 3) {
+            toast.error(
+                "The username should be 3 or more characters",
+                toastOptions
+            );
+            return false;
+        } else if (password.length < 8) {
+            toast.error(
+                "The password should be greater than 8 characters",
+                toastOptions
+            );
+            return false;
+        } else {
+            return true;
+        }
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert("form");
+        if (handleValidation()) {
+
+        }
     };
-    const handleChange = (e) => {};
+    const handleChange = (e) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
+    };
     return (
         <>
             <FormContainer>
@@ -22,24 +62,28 @@ export default function Register() {
                         placeholder="Username"
                         name="username"
                         onChange={(e) => handleChange(e)}
+                        required
                     />
                     <input
                         type="email"
                         placeholder="Email"
                         name="email"
                         onChange={(e) => handleChange(e)}
+                        required
                     />
                     <input
                         type="password"
                         placeholder="Password"
                         name="password"
                         onChange={(e) => handleChange(e)}
+                        required
                     />
                     <input
                         type="password"
                         placeholder="Confirm Password"
                         name="confirmPassword"
                         onChange={(e) => handleChange(e)}
+                        required
                     />
                     <button type="submit">Create Account</button>
                     <span>
@@ -47,6 +91,7 @@ export default function Register() {
                     </span>
                 </form>
             </FormContainer>
+            <ToastContainer />
         </>
     );
 }
@@ -67,6 +112,58 @@ const FormContainer = styled.div`
         justify-content: center;
         img {
             height: 5rem;
+        }
+        h1 {
+            color: white;
+            text-transform: uppercase;
+        }
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        background-color: #00000076;
+        border-radius: 2rem;
+        padding: 3rem 5rem;
+        width: 25vw;
+        input {
+            background-color: transparent;
+            padding: 1rem;
+            border: 0.1rem solid #4e0eff;
+            border-radius: 0.4rem;
+            color: white;
+            width: 100%;
+            font-size: 1rem;
+            &:focus {
+                border: 0.1rem solid #997af0;
+                outline: none;
+            }
+        }
+        button {
+            background-color: #997af0;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0.4rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: 0.5s ease-in-out;
+            &:hover {
+                background-color: #4e0eff;
+            }
+        }
+        span {
+            color: white;
+            text-transform: capitalize;
+            margin-top: 1rem;
+            text-align: center;
+            a {
+                color: #997af0;
+                text-decoration: none;
+                font-weight: bold;
+            }
         }
     }
 `;
