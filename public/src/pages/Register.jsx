@@ -59,7 +59,7 @@ export default function Register() {
             });
 
             // validation from response server
-            if (data.status === false) { // ini juga masih gabisa muncul toast notif nya
+            if (data.status === false) {
                 toast.error(data.message, toastOptions);
             }
 
