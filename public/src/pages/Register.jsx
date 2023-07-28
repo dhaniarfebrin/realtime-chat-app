@@ -47,6 +47,12 @@ export default function Register() {
         }
     };
 
+    useEffect(() => {
+        if (localStorage.getItem("user")) {
+            navigate("/");
+        }
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (handleValidation()) {
