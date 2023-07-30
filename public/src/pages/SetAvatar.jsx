@@ -27,11 +27,32 @@ export default function SetAvatar() {
     const setProfilePicture = async () => {
         if (selectedAvatar === undefined) {
             toast.error("Please select an avatar", toastOptions);
+        } else {
+            const user = await JSON.parse(localStorage.getItem("user"));
+            const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
+                image: avatars[selectedAvatar],
+            });
+
+            if (data.isSet) {
+                user.isAvatarImageSet = true;
+                user.avatarImage = data.image;
+                localStorage.setItem("user", JSON.stringify(user));
+                navigate("/");
+            } else {
+                toast.error(
+                    "Error setting avatar, please try again.",
+                    toastOptions
+                );
+            }
         }
     };
 
     useEffect(() => {
         async function fetchData() {
+            if (!localStorage.getItem("user")) {
+                return navigate("/login");
+            }
+
             const data = [];
             for (let i = 0; i < 4; i++) {
                 const image = await axios.get(
